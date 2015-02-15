@@ -95,6 +95,22 @@ mean(steps_day_filledNA$steps)
 median(steps_day_filledNA$steps)
 
 ```
-
+Do these values differ from the estimates from the first part of the assignment? yes, differ little!!
+What is the impact of imputing missing data on the estimates of the total daily number of steps? no impact observed
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r warning=FALSE, echo = TRUE}
+steps_week<-steps_day_filledNA
+steps_week$date<-weekdays(steps_week$date)
+#considere my french language
+steps_week2 <- mutate(steps_week, factor = ifelse(date == "samedi" | date == "dimanche", "Weekend", "Weekday"))
+```
+
+
+```{r warning=FALSE, echo = TRUE}
+steps_weekend<-filter(steps_week2, factor == "Weekend")
+steps_weekday<-filter(steps_week2, factor == "Weekday")
+qplot(factor,steps, data=steps_weekend,geom="line",stat="identity",main ="Weekend")
+qplot(factor,steps, data=steps_weekday,geom="line",stat="identity",main ="Weekday")
+```
+
