@@ -4,9 +4,10 @@ output: html_document
 keep_md: true
 ---
 load library used in code
-```{r echo = FALSE ,warning=FALSE}
+```{r warning=FALSE,echo = FALSE}
 library(dplyr)
-#library(reshape2)
+library(reshape2)
+library(ggplot2)
 
 ```
 
@@ -14,7 +15,7 @@ library(dplyr)
 
 read the CSV file, put in a data frame called activity, generte some information about our dataframe like dimension and data!!
 
-```{r echo = TRUE,warning=FALSE}
+```{r warning=FALSE,echo = TRUE}
 activity <- read.csv(unz("activity.zip", "activity.csv"), header=T, sep=",")
 dim(activity)
 head(activity,n=5)
@@ -22,18 +23,37 @@ head(activity,n=5)
 ```
 
 ## What is mean total number of steps taken per day?
-first change the class of variable date (factor at first) to Date, second melt steps by date and interval to get list of steps for each day, then calculate mean at each day
-```{r, warning=FALSE, echo = TRUE}
-activity$date<-as.Date(activity$date,tz = "UTC")
-meandata <- melt(activity, id.vars=c("date","interval"))
-means_steps_day <- dcast(meandata, date~variable, mean)
-head(means_steps_day,n=5)
+first change the class of variable date (factor at first) to Date, second melt steps by date and interval to get list of steps for each day, then calculate total steps at each day:
+```{r,  warning=FALSE, echo = TRUE}
+activity$date<-as.Date(activity$date)
+stepsdata <- melt(activity, id.vars=c("date","interval"), na.rm = TRUE)
+steps_day <- dcast(stepsdata, date~variable, sum)
 ```
+the total number of steps taken per day:
+```{r,  warning=FALSE, echo = TRUE}
+dim(steps_day)
+head(steps_day,n=10)
+```
+
+histogram of the total number of steps taken each day:
+```{r warning=FALSE, echo = TRUE}
+qplot(date,steps, data=steps_day, xlab = deparse(substitute(date)),geom="histogram",stat="identity",main ="Total Steps per day")
+
+```
+
+Mean and Median of the total number of steps taken per day:
+```{r warning=FALSE, echo = TRUE}
+mean(steps_day$steps)
+median(steps_day$steps)
+
+```
+
 
 ## What is the average daily activity pattern?
 
-```{r}
-
+```{r warning=FALSE, echo = TRUE}
+steps_interval <- dcast(stepsdata, interval~variable, mean)
+qplot(interval,steps, data=steps_interval, xlab = deparse(substitute(interval)),geom="line",stat="identity",main ="Average number of steps taken per interval",xlab = "5 min interval")
 ```
 
 
