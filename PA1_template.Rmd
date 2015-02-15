@@ -53,7 +53,11 @@ median(steps_day$steps)
 
 ```{r warning=FALSE, echo = TRUE}
 steps_interval <- dcast(stepsdata, interval~variable, mean)
-qplot(interval,steps, data=steps_interval, xlab = deparse(substitute(interval)),geom="line",stat="identity",main ="Average number of steps taken per interval",xlab = "5 min interval")
+qplot(interval,steps, data=steps_interval,geom="line",stat="identity",main ="Average number of steps taken per interval", xlab ="5-min interval")
+```
+In 5-minute interval,  the maximum number of steps is:
+```{r warning=FALSE, echo = TRUE}
+steps_interval[which.max(steps_interval$steps),]
 ```
 
 
