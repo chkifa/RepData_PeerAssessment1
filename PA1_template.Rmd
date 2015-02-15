@@ -82,8 +82,19 @@ activity_filledNA<-rbind(activity_mutNA,activity_noNA)
 head(activity_filledNA,n=10)
 ```
 
-## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+4- histogram of the total number of steps taken each day:
+```{r warning=FALSE, echo = TRUE}
+stepsdata_filledNA <- melt(activity_filledNA, id.vars=c("date","interval"), na.rm = TRUE)
+steps_day_filledNA <- dcast(stepsdata_filledNA, date~variable, sum)
+qplot(date,steps, data=steps_day_filledNA, xlab = deparse(substitute(date)),geom="histogram",stat="identity",main ="Total Steps per day")
+```
+
+mean and median of steps taken per day:
+```{r warning=FALSE, echo = TRUE}
+mean(steps_day_filledNA$steps)
+median(steps_day_filledNA$steps)
 
 ```
 
+
+## Are there differences in activity patterns between weekdays and weekends?
