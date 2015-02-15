@@ -4,9 +4,9 @@ output: html_document
 keep_md: true
 ---
 load library used in code
-```{r echo = FALSE}
+```{r echo = FALSE ,warning=FALSE}
 library(dplyr)
-library(reshape2)
+#library(reshape2)
 
 ```
 
@@ -14,7 +14,7 @@ library(reshape2)
 
 read the CSV file, put in a data frame called activity, generte some information about our dataframe like dimension and data!!
 
-```{r echo = TRUE}
+```{r echo = TRUE,warning=FALSE}
 activity <- read.csv(unz("activity.zip", "activity.csv"), header=T, sep=",")
 dim(activity)
 head(activity,n=5)
@@ -22,11 +22,10 @@ head(activity,n=5)
 ```
 
 ## What is mean total number of steps taken per day?
-first change the class of date to Date, second select only complete cases from activity data framesteps_day<-distinct(select(activity, date,steps))
-```{r, echo = TRUE}
-activity$date<-as.Date(activity$date)
-#activity <- activity[complete.cases(activity),])
-meandata <- melt(activity, id=c("date","interval"))
+first change the class of variable date (factor at first) to Date, second melt steps by date and interval to get list of steps for each day, then calculate mean at each day
+```{r, warning=FALSE, echo = TRUE}
+activity$date<-as.Date(activity$date,tz = "UTC")
+meandata <- melt(activity, id.vars=c("date","interval"))
 means_steps_day <- dcast(meandata, date~variable, mean)
 head(means_steps_day,n=5)
 ```

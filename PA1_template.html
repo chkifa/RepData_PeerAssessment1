@@ -65,18 +65,6 @@ img {
 
 
 <p>load library used in code</p>
-<pre><code>## Warning: package 'dplyr' was built under R version 3.1.2</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre><code>## Warning: package 'reshape2' was built under R version 3.1.2</code></pre>
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
 <p>read the CSV file, put in a data frame called activity, generte some information about our dataframe like dimension and data!!</p>
@@ -94,12 +82,8 @@ dim(activity)</code></pre>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is mean total number of steps taken per day?</h2>
 <p>first change the class of date to Date, second select only complete cases from activity data framesteps_day&lt;-distinct(select(activity, date,steps))</p>
-<pre class="r"><code>activity$date&lt;-as.Date(activity$date)</code></pre>
-<pre><code>## Warning in strptime(xx, f &lt;- &quot;%Y-%m-%d&quot;, tz = &quot;GMT&quot;): unable to identify current timezone 'M':
-## please set environment variable 'TZ'</code></pre>
-<pre><code>## Warning in strptime(xx, f &lt;- &quot;%Y-%m-%d&quot;, tz = &quot;GMT&quot;): unknown timezone
-## 'localtime'</code></pre>
-<pre class="r"><code>#activity &lt;- activity[complete.cases(activity),])
+<pre class="r"><code>activity$date&lt;-as.Date(activity$date,tz = &quot;UTC&quot;)
+#activity &lt;- activity[complete.cases(activity),])
 meandata &lt;- melt(activity, id=c(&quot;date&quot;,&quot;interval&quot;))
 means_steps_day &lt;- dcast(meandata, date~variable, mean)
 head(means_steps_day,n=5)</code></pre>
