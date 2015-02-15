@@ -55,18 +55,32 @@ median(steps_day$steps)
 steps_interval <- dcast(stepsdata, interval~variable, mean)
 qplot(interval,steps, data=steps_interval,geom="line",stat="identity",main ="Average number of steps taken per interval", xlab ="5-min interval")
 ```
+
 In 5-minute interval,  the maximum number of steps is:
-```{r warning=FALSE, echo = TRUE}
-steps_interval[which.max(steps_interval$steps),]
+```{r echo = TRUE}
+steps_interval_sum <- dcast(stepsdata, interval~variable, sum)
+steps_interval_sum[which.max(steps_interval_sum$steps),]
 ```
 
 
 ## Imputing missing values
-
-```{r}
-
+1- the total number of missing values in the dataset:
+```{r warning=FALSE, echo = TRUE}
+activity_NA<-activity[!complete.cases(activity),]
+dim(activity_NA)[1]
 ```
 
+2- strategy for filling in all of the missing values in the dataset:
+```{r warning=FALSE, echo = TRUE}
+activity_mutNA <-mutate(activity_NA,steps=round(mean(steps_interval$steps)))
+```
+
+3- original dataset with the missing data filled in
+```{r warning=FALSE, echo = TRUE}
+activity_noNA<-activity[complete.cases(activity),]
+activity_filledNA<-rbind(activity_mutNA,activity_noNA)
+head(activity_filledNA,n=10)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r}
