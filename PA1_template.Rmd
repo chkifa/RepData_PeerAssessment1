@@ -8,6 +8,7 @@ load library used in code
 library(dplyr)
 library(reshape2)
 library(ggplot2)
+library(lattice)
 
 ```
 
@@ -100,7 +101,7 @@ What is the impact of imputing missing data on the estimates of the total daily 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r warning=FALSE, echo = TRUE}
-steps_week<-steps_day_filledNA
+steps_week<-activity_filledNA
 steps_week$date<-weekdays(steps_week$date)
 #considere my french language
 steps_week2 <- mutate(steps_week, factor = ifelse(date == "samedi" | date == "dimanche", "Weekend", "Weekday"))
@@ -110,7 +111,8 @@ steps_week2 <- mutate(steps_week, factor = ifelse(date == "samedi" | date == "di
 ```{r warning=FALSE, echo = TRUE}
 steps_weekend<-filter(steps_week2, factor == "Weekend")
 steps_weekday<-filter(steps_week2, factor == "Weekday")
-qplot(factor,steps, data=steps_weekend,geom="line",stat="identity",main ="Weekend")
-qplot(factor,steps, data=steps_weekday,geom="line",stat="identity",main ="Weekday")
+xyplot(steps ~ interval|factor, steps_week2, type = "l", layout = c(1, 2), 
+       xlab = "Interval", ylab = "Number of steps")
+
 ```
 
