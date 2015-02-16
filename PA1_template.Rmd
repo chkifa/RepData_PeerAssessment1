@@ -109,9 +109,8 @@ steps_week2 <- mutate(steps_week, factor = ifelse(date == "samedi" | date == "di
 
 
 ```{r warning=FALSE, echo = TRUE}
-steps_weekend<-filter(steps_week2, factor == "Weekend")
-steps_weekday<-filter(steps_week2, factor == "Weekday")
-xyplot(steps ~ interval|factor, steps_week2, type = "l", layout = c(1, 2), 
+datafinal<- aggregate(steps ~ interval + factor, data = steps_week2, mean) 
+xyplot(steps ~ interval|factor, datafinal, type = "l", layout = c(1, 2), 
        xlab = "Interval", ylab = "Number of steps")
 
 ```
